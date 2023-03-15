@@ -1,24 +1,66 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import BalanceSection from "./components/BalanceSection";
+import Listgroup from "./components/Listgroup";
+import Mainsection from "./components/Mainsection";
+import Navbar from "./components/Navbar";
+import { v4 as uuidv4 } from 'uuid';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 
 function App() {
+
+
+  const notify = () => toast("Wow so easy!");
+
+
+     const [transactions , setTransactions] = useState([
+      // {
+      //    id : 1,
+      //    text : "Salary",
+      //    amount : 100000
+      // },
+      // {
+      //    id : 2,
+      //    text : "iphone",
+      //    amount : -85000
+      // },
+      // {
+      //    id : 3,
+      //    text : "Comission",
+      //    amount : 50000
+      // }
+    ])
+
+    const saveTransaction = (transaction)=>{
+       const newTransaction = {
+        id : uuidv4(),
+        text : transaction.text,
+        amount : parseInt(transaction.amount)
+       }
+       setTransactions([...transactions , newTransaction])
+    }
+
+    const deleteTransaction = (id) => {
+        setTransactions(transactions.filter(item => item.id !== id))
+    }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+
+    <>
+
+      <Navbar />
+
+      <div className="container d-flex  mt-3  px-0">
+        <Mainsection saveTransaction={saveTransaction}/>
+        <BalanceSection transactions={transactions}/>
+      </div>
+
+      <Listgroup transactions={transactions} deleteTransaction={deleteTransaction}/>
+      <ToastContainer />
+    </>
+
   );
 }
 
